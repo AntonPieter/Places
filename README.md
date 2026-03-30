@@ -99,6 +99,10 @@ This project is scoped as an assignment. In a production app, the following woul
 - **Coordinator/Router** pattern for centralized navigation and deep linking
 - **Dependency container** instead of default parameter injection, to manage the object graph in one place
 
+### Code Quality & CI
+- **SwiftLint** for enforcing consistent code style and catching common issues
+- **CI/CD pipeline** (e.g. GitHub Actions) to run linting, tests, and builds on every pull request
+
 ### Data & Persistence
 - Migration from `UserDefaults` to **SwiftData** for richer querying, relationships, and migration support
 - **Pagination** if the location list grows beyond a single API response
