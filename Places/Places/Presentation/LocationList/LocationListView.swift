@@ -45,6 +45,15 @@ struct LocationListView: View {
                 LocationRowView(location: location)
             }
             .listRowSeparator(.hidden)
+            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                if location.isCustom {
+                    Button(role: .destructive) {
+                        viewModel.deleteLocation(location)
+                    } label: {
+                        Label(String(localized: "delete_button"), systemImage: "trash")
+                    }
+                }
+            }
         }
         .listStyle(.plain)
     }

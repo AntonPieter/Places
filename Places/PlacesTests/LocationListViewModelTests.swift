@@ -118,4 +118,36 @@ struct LocationListViewModelTests {
         #expect(mockStore.storedLocations.count == 1)
         #expect(mockStore.storedLocations.first?.name == "Rotterdam")
     }
+
+    // MARK: - Delete Location
+
+    @Test func deleteLocation_givenCustomLocation_removesFromListAndStore() {
+        // Given
+        let mockStore = MockCustomLocationStore()
+        let customLocation = Location(name: "Rotterdam", lat: 51.9225, long: 4.4792, isCustom: true)
+        mockStore.storedLocations = [customLocation]
+        let viewModel = LocationListViewModel(customLocationStore: mockStore)
+        viewModel.addLocation(customLocation)
+
+        // When
+        viewModel.deleteLocation(customLocation)
+
+        // Then
+        #expect(viewModel.locations.isEmpty)
+        #expect(mockStore.storedLocations.isEmpty)
+    }
+
+    @Test func deleteLocation_givenApiLocation_doesNotRemove() {
+        // Given
+        let mockStore = MockCustomLocationStore()
+        let viewModel = LocationListViewModel(customLocationStore: mockStore)
+        let apiLocation = Location(name: "Amsterdam", lat: 52.35, long: 4.83, isCustom: false)
+        viewModel.locations = [apiLocation]
+
+        // When
+        viewModel.deleteLocation(apiLocation)
+
+        // Then
+        #expect(viewModel.locations.count == 1)
+    }
 }

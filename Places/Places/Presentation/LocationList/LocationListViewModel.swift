@@ -50,6 +50,14 @@ final class LocationListViewModel {
         customLocationStore.save(customLocations)
     }
 
+    func deleteLocation(_ location: Location) {
+        guard location.isCustom else { return }
+        locations.removeAll { $0 == location }
+        var customLocations = customLocationStore.load()
+        customLocations.removeAll { $0 == location }
+        customLocationStore.save(customLocations)
+    }
+
     func openInWikipedia(location: Location) {
         openWikipediaUseCase.execute(latitude: location.lat, longitude: location.long)
     }

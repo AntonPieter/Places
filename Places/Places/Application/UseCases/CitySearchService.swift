@@ -53,7 +53,7 @@ final class CitySearchService: NSObject, CitySearchServiceProtocol {
         let name = mapItem.addressRepresentations?.cityName ?? suggestion.title
         let coordinate = mapItem.location.coordinate
 
-        return Location(name: name, lat: coordinate.latitude, long: coordinate.longitude)
+        return Location(name: name, lat: coordinate.latitude, long: coordinate.longitude, isCustom: true)
     }
 }
 

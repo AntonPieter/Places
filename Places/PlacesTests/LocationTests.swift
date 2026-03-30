@@ -49,4 +49,42 @@ struct LocationTests {
         let location = Location(name: "Test", lat: 1.0, long: 2.0)
         #expect(location.id == "1.0,2.0")
     }
+
+    // MARK: - isCustom
+
+    @Test func isCustom_givenDefault_returnsFalse() {
+        let location = Location(name: "Amsterdam", lat: 52.35, long: 4.83)
+        #expect(location.isCustom == false)
+    }
+
+    @Test func isCustom_givenTrue_returnsTrue() {
+        let location = Location(name: "Rotterdam", lat: 51.92, long: 4.48, isCustom: true)
+        #expect(location.isCustom == true)
+    }
+
+    @Test func decodesLocation_givenNoIsCustomField_defaultsToFalse() throws {
+        // Given - JSON without isCustom (like API responses)
+        let json = """
+        {"name": "Amsterdam", "lat": 52.35, "long": 4.83}
+        """.data(using: .utf8)!
+
+        // When
+        let location = try JSONDecoder().decode(Location.self, from: json)
+
+        // Then
+        #expect(location.isCustom == false)
+    }
+
+    @Test func decodesLocation_givenIsCustomField_preservesValue() throws {
+        // Given - JSON with isCustom (like stored custom locations)
+        let json = """
+        {"name": "Rotterdam", "lat": 51.92, "long": 4.48, "isCustom": true}
+        """.data(using: .utf8)!
+
+        // When
+        let location = try JSONDecoder().decode(Location.self, from: json)
+
+        // Then
+        #expect(location.isCustom == true)
+    }
 }
