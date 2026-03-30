@@ -41,6 +41,7 @@ All dependencies are injected via protocols, making every layer independently te
 - **SwiftUI** with `@Observable` (Observation framework)
 - **Swift Concurrency** (async/await, `@MainActor`, `Sendable`)
 - **MapKit** (`MKLocalSearchCompleter`, `MKLocalSearch`, `MKReverseGeocodingRequest`)
+- **UIKit** — only for `UIApplication.canOpenURL` / `.open` to check Wikipedia app availability and open deep links. There is no pure SwiftUI equivalent for `canOpenURL`. The usage is isolated behind a `URLOpening` protocol in `DefaultURLOpener.swift`.
 - **Swift Testing** framework for unit tests
 
 ## Testing
@@ -75,3 +76,29 @@ Places/
 ├── Localizable.xcstrings     EN + NL translations
 └── Info.plist
 ```
+
+## Trade-offs & Future Improvements
+
+This project is scoped as an assignment. In a production app, the following would be added:
+
+### Testing
+- **Snapshot tests** (e.g. with `swift-snapshot-testing`) to catch unintended UI regressions across devices, orientations, and Dynamic Type sizes
+- **Integration tests** for end-to-end flows (network → repository → ViewModel → UI)
+- **Accessibility audits** with automated tools to verify VoiceOver flows
+
+### iPad & Multi-platform
+- No iPad-specific layout is implemented. A production app would use `horizontalSizeClass` or `NavigationSplitView` to provide a sidebar/detail layout on larger screens
+- macOS Catalyst or native macOS target via SwiftUI's multi-platform support
+
+### Networking & Resilience
+- **Caching layer** (e.g. `URLCache` or an in-memory cache) to avoid refetching on every view appearance
+- **Retry logic** with exponential backoff for transient network failures
+- **Offline mode** showing cached data when the network is unavailable
+
+### Architecture
+- **Coordinator/Router** pattern for centralized navigation and deep linking
+- **Dependency container** instead of default parameter injection, to manage the object graph in one place
+
+### Data & Persistence
+- Migration from `UserDefaults` to **SwiftData** for richer querying, relationships, and migration support
+- **Pagination** if the location list grows beyond a single API response
